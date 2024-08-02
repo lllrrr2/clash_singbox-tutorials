@@ -1,6 +1,6 @@
-# 分享自己使用 [Clash Verge](https://github.com/MetaCubeX/clash-verge) 搭配 rule-set 方案的一套配置
+# 分享自己使用 [Clash Verge](https://github.com/clash-verge-rev/clash-verge-rev) 搭配 rule-set 方案的一套配置
 # 声明：
-1. 此方案此方案适用于 [Clash](https://github.com/Dreamacro/clash)，采用 `RULE-SET` 规则，**属高度定制，仅供参考**
+1. 此方案适用于 [Clash](https://github.com/Dreamacro/clash)，采用 `RULE-SET` 规则，**属高度定制，仅供参考**
 2. 规则参考 [DustinWin/ruleset_geodata/ruleset](https://github.com/DustinWin/ruleset_geodata/tree/master#%E4%BA%8C-ruleset-%E8%A7%84%E5%88%99%E9%9B%86%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E)
 3. 请根据自身情况进行修改，**适合自己的方案才是最好的方案**，如无特殊需求，可以照搬
 4. 此方案适用于 Clash Verge（以 Windows 端为例）
@@ -14,228 +14,199 @@ proxy-providers:
     # 修改为你的 Clash 订阅链接
     url: "https://example.com/xxx/xxx&flag=clash"
     path: ./proxies/airport.yaml
-    interval: 43200
-    filter: "香港|台湾|日本|韩国|新加坡|美国"
+    interval: 86400
+    filter: "🇭🇰|🇹🇼|🇯🇵|🇰🇷|🇸🇬|🇺🇸"
     health-check:
       enable: true
-      url: "https://www.gstatic.com/generate_204"
+      url: https://www.gstatic.com/generate_204
       interval: 600
 
-mode: rule
-ipv6: true
-log-level: silent
-allow-lan: true
-mixed-port: 7890
-unified-delay: false
-tcp-concurrent: true
-external-controller-tls: 127.0.0.1:9090
-find-process-mode: strict
-global-client-fingerprint: chrome
-profile: {store-selected: true, store-fake-ip: true}
-
-sniffer:
-  enable: true
-  sniff: {HTTP: {ports: [80, 8080-8880], override-destination: true}, TLS: {ports: [443, 8443]}, QUIC: {ports: [443, 8443]}}
-  skip-domain: ['Mijia Cloud']
-
-tun:
-  enable: true
-  stack: system
-  dns-hijack: ['any:53']
-  auto-route: true
-  auto-detect-interface: true
-  strict-route: true
+# 若没有单个出站代理节点，须删除所有 `🆓 免费节点` 相关内容
+proxies:
+  - name: 🆓 免费节点
+    type: vless
+    server: example.com
+    port: 443
+    uuid: {uuid}
+    network: ws
+    tls: true
+    udp: false
+    sni: example.com
+    client-fingerprint: chrome
+    ws-opts:
+      path: "/?ed=2048"
+      headers:
+        host: example.com
 
 proxy-groups:
-  - {name: 🚀 节点选择, type: select, proxies: [🇭🇰 香港节点, 🇹🇼 台湾节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点]}
-
-  - {name: 📈 网络测试, type: select, proxies: [🎯 全球直连, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点]}
-
+  - {name: 🚀 节点选择, type: select, proxies: [🇭🇰 香港节点, 🇹🇼 台湾节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点, 🆓 免费节点]}
   # 若机场的 UDP 质量不是很好，导致某游戏无法登录或进入房间，可以添加 `disable-udp: true` 配置项解决
   - {name: 🐟 漏网之鱼, type: select, proxies: [🚀 节点选择, 🎯 全球直连]}
-
-  - {name: 🔗 直连域名, type: select, proxies: [🎯 全球直连, 🚀 节点选择]}
-
-  - {name: 🪜 代理域名, type: select, proxies: [🚀 节点选择, 🎯 全球直连]}
-
-  - {name: 🎮 游戏平台, type: select, proxies: [🎯 全球直连, 🚀 节点选择]}
-
-  - {name: Ⓜ️ 微软服务, type: select, proxies: [🎯 全球直连, 🚀 节点选择]}
-
-  - {name: 📢 谷歌服务, type: select, proxies: [🎯 全球直连, 🚀 节点选择]}
-
+  - {name: 📈 网络测试, type: select, proxies: [🎯 全球直连, 🇭🇰 香港节点, 🇹🇼 台湾节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点, 🆓 免费节点]}
+  - {name: 🤖 人工智能, type: select, proxies: [🇭🇰 香港节点, 🇹🇼 台湾节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点]}
+  - {name: 🎮 游戏服务, type: select, proxies: [🎯 全球直连, 🚀 节点选择]}
+  - {name: 🪟 微软服务, type: select, proxies: [🎯 全球直连, 🚀 节点选择]}
+  - {name: 🇬 谷歌服务, type: select, proxies: [🎯 全球直连, 🚀 节点选择]}
   - {name: 🍎 苹果服务, type: select, proxies: [🎯 全球直连, 🚀 节点选择]}
-
-  - {name: 🇨🇳 国内 IP, type: select, proxies: [🎯 全球直连, 🚀 节点选择]}
-
+  - {name: 🇨🇳 直连域名, type: select, proxies: [🎯 全球直连, 🚀 节点选择]}
+  - {name: 🇨🇳 直连 IP, type: select, proxies: [🎯 全球直连, 🚀 节点选择]}
+  - {name: 🪜 代理域名, type: select, proxies: [🚀 节点选择, 🎯 全球直连]}
   - {name: 📲 电报消息, type: select, proxies: [🚀 节点选择]}
-
   - {name: 🖥️ 直连软件, type: select, proxies: [🎯 全球直连]}
-
   - {name: 🔒 私有网络, type: select, proxies: [🎯 全球直连]}
-
   - {name: 🛑 广告拦截, type: select, proxies: [REJECT]}
-
   - {name: 🎯 全球直连, type: select, proxies: [DIRECT]}
 
-  # 采用节点负载均衡策略，优点是更稳定，速度可能有提升；推荐在节点复用比较多的情况下使用
-  - {name: 🇭🇰 香港节点, type: load-balance, strategy: consistent-hashing, lazy: true, use: [🛫 我的机场], filter: "香港"}
-
-  - {name: 🇹🇼 台湾节点, type: load-balance, strategy: consistent-hashing, lazy: true, use: [🛫 我的机场], filter: "台湾"}
-
-  - {name: 🇯🇵 日本节点, type: load-balance, strategy: consistent-hashing, lazy: true, use: [🛫 我的机场], filter: "日本"}
-
-  - {name: 🇰🇷 韩国节点, type: load-balance, strategy: consistent-hashing, lazy: true, use: [🛫 我的机场], filter: "韩国"}
-
-  - {name: 🇸🇬 新加坡节点, type: load-balance, strategy: consistent-hashing, lazy: true, use: [🛫 我的机场], filter: "新加坡"}
-
-  - {name: 🇺🇸 美国节点, type: load-balance, strategy: consistent-hashing, lazy: true, use: [🛫 我的机场], filter: "美国"}
+  - {name: 🇭🇰 香港节点, type: url-test, tolerance: 50, include-all-providers: true, filter: "🇭🇰"}
+  - {name: 🇹🇼 台湾节点, type: url-test, tolerance: 50, include-all-providers: true, filter: "🇹🇼"}
+  - {name: 🇯🇵 日本节点, type: url-test, tolerance: 50, include-all-providers: true, filter: "🇯🇵"}
+  - {name: 🇰🇷 韩国节点, type: url-test, tolerance: 50, include-all-providers: true, filter: "🇰🇷"}
+  - {name: 🇸🇬 新加坡节点, type: url-test, tolerance: 50, include-all-providers: true, filter: "🇸🇬"}
+  - {name: 🇺🇸 美国节点, type: url-test, tolerance: 50, include-all-providers: true, filter: "🇺🇸"}
 
 rule-providers:
   ads:
     type: http
     behavior: domain
-    url: "https://fastly.jsdelivr.net/gh/DustinWin/ruleset_geodata@clash/ads.yaml"
-    path: ./ruleset/ads.yaml
-    interval: 86400
-
-  private:
-    type: http
-    behavior: domain
-    url: "https://fastly.jsdelivr.net/gh/DustinWin/ruleset_geodata@clash/private.yaml"
-    path: ./ruleset/private.yaml
-    interval: 86400
-
-  microsoft-cn:
-    type: http
-    behavior: domain
-    url: "https://fastly.jsdelivr.net/gh/DustinWin/ruleset_geodata@clash/microsoft-cn.yaml"
-    path: ./ruleset/microsoft-cn.yaml
-    interval: 86400
-
-  apple-cn:
-    type: http
-    behavior: domain
-    url: "https://fastly.jsdelivr.net/gh/DustinWin/ruleset_geodata@clash/apple-cn.yaml"
-    path: ./ruleset/apple-cn.yaml
-    interval: 86400
-
-  google-cn:
-    type: http
-    behavior: domain
-    url: "https://fastly.jsdelivr.net/gh/DustinWin/ruleset_geodata@clash/google-cn.yaml"
-    path: ./ruleset/google-cn.yaml
-    interval: 86400
-
-  games-cn:
-    type: http
-    behavior: domain
-    url: "https://fastly.jsdelivr.net/gh/DustinWin/ruleset_geodata@clash/games-cn.yaml"
-    path: ./ruleset/games-cn.yaml
-    interval: 86400
-
-  networktest:
-    type: http
-    behavior: classical
-    url: "https://fastly.jsdelivr.net/gh/DustinWin/ruleset_geodata@clash/networktest.yaml"
-    path: ./ruleset/networktest.yaml
+    format: text
+    path: ./rules/ads.list
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/ads.list"
     interval: 86400
 
   applications:
     type: http
     behavior: classical
-    url: "https://fastly.jsdelivr.net/gh/DustinWin/ruleset_geodata@clash/applications.yaml"
-    path: ./ruleset/applications.yaml
+    format: text
+    path: ./rules/applications.list
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/applications.list"
+    interval: 86400
+
+  private:
+    type: http
+    behavior: domain
+    format: text
+    path: ./rules/private.list
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/private.list"
+    interval: 86400
+
+  microsoft-cn:
+    type: http
+    behavior: domain
+    format: text
+    path: ./rules/microsoft-cn.list
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/microsoft-cn.list"
+    interval: 86400
+
+  apple-cn:
+    type: http
+    behavior: domain
+    format: text
+    path: ./rules/apple-cn.list
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/apple-cn.list"
+    interval: 86400
+
+  google-cn:
+    type: http
+    behavior: domain
+    format: text
+    path: ./rules/google-cn.list
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/google-cn.list"
+    interval: 86400
+
+  games-cn:
+    type: http
+    behavior: domain
+    format: text
+    path: ./rules/games-cn.list
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/games-cn.list"
+    interval: 86400
+
+  ai:
+    type: http
+    behavior: domain
+    format: text
+    path: ./rules/ai.list
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/ai.list"
+    interval: 86400
+
+  networktest:
+    type: http
+    behavior: classical
+    format: text
+    path: ./rules/networktest.list
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/networktest.list"
     interval: 86400
 
   proxy:
     type: http
     behavior: domain
-    url: "https://fastly.jsdelivr.net/gh/DustinWin/ruleset_geodata@clash/proxy.yaml"
-    path: ./ruleset/proxy.yaml
+    format: text
+    path: ./rules/proxy.list
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/proxy.list"
     interval: 86400
 
   cn:
     type: http
     behavior: domain
-    url: "https://fastly.jsdelivr.net/gh/DustinWin/ruleset_geodata@clash/cn.yaml"
-    path: ./ruleset/cn.yaml
+    format: text
+    path: ./rules/cn.list
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/cn.list"
     interval: 86400
 
   telegramip:
     type: http
     behavior: ipcidr
-    url: "https://fastly.jsdelivr.net/gh/DustinWin/ruleset_geodata@clash/telegramip.yaml"
-    path: ./ruleset/telegramip.yaml
+    format: text
+    path: ./rules/telegramip.list
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/telegramip.list"
     interval: 86400
 
   privateip:
     type: http
     behavior: ipcidr
-    url: "https://fastly.jsdelivr.net/gh/DustinWin/ruleset_geodata@clash/privateip.yaml"
-    path: ./ruleset/privateip.yaml
+    format: text
+    path: ./rules/privateip.list
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/privateip.list"
     interval: 86400
 
   cnip:
     type: http
     behavior: ipcidr
-    url: "https://fastly.jsdelivr.net/gh/DustinWin/ruleset_geodata@clash/cnip.yaml"
-    path: ./ruleset/cnip.yaml
+    format: text
+    path: ./rules/cnip.list
+    url: "https://raw.githubusercontent.com/DustinWin/ruleset_geodata/clash-ruleset/cnip.list"
     interval: 86400
 
 rules:
   - RULE-SET,ads,🛑 广告拦截
-  - RULE-SET,private,🔒 私有网络
-  - RULE-SET,microsoft-cn,Ⓜ️ 微软服务
-  - RULE-SET,apple-cn,🍎 苹果服务
-  - RULE-SET,google-cn,📢 谷歌服务
-  - RULE-SET,games-cn,🎮 游戏平台
-  - RULE-SET,networktest,📈 网络测试
   - RULE-SET,applications,🖥️ 直连软件
+  - RULE-SET,private,🔒 私有网络
+  - RULE-SET,microsoft-cn,🪟 微软服务
+  - RULE-SET,apple-cn,🍎 苹果服务
+  - RULE-SET,google-cn,🇬 谷歌服务
+  - RULE-SET,games-cn,🎮 游戏服务
+  - RULE-SET,ai,🤖 人工智能
+  - RULE-SET,networktest,📈 网络测试
   - RULE-SET,proxy,🪜 代理域名
-  - RULE-SET,cn,🔗 直连域名
-  - RULE-SET,telegramip,📲 电报消息
+  - RULE-SET,cn,🇨🇳 直连域名
+  - RULE-SET,telegramip,📲 电报消息,no-resolve
   - RULE-SET,privateip,🔒 私有网络,no-resolve
-  - RULE-SET,cnip,🇨🇳 国内 IP
+  - RULE-SET,cnip,🇨🇳 直连 IP
   - MATCH,🐟 漏网之鱼
 ```
-# 二、 导入 [Clash.Meta 内核](https://github.com/MetaCubeX/mihomo)
-以管理员身份运行 CMD，执行如下命令：
-```
-taskkill /f /t /im "Clash Verge*"
-taskkill /f /t /im Clash-Verge*
-taskkill /f /t /im clash-meta*
-curl -o "%LOCALAPPDATA%\Clash Verge\clash-meta.exe" -L https://mirror.ghproxy.com/https://raw.githubusercontent.com/DustinWin/clash_singbox-tools/main/Clash.Meta-release/clash.meta-windows-amd64.exe
-curl -o "%LOCALAPPDATA%\Clash Verge\clash-meta-alpha.exe" -L https://mirror.ghproxy.com/https://raw.githubusercontent.com/DustinWin/clash_singbox-tools/main/Clash.Meta-alpha/clash.meta-windows-amd64.exe
-```
-# 三、 设置部分
+# 二、 设置部分
 1. 设置可参考《[Clash Verge 配置-ruleset 方案](https://github.com/DustinWin/clash_singbox-tutorials/blob/main/%E6%95%99%E7%A8%8B%E5%90%88%E9%9B%86/Clash/%E5%9F%BA%E7%A1%80%E7%AF%87/Clash%20Verge%20%E9%85%8D%E7%BD%AE-ruleset%20%E6%96%B9%E6%A1%88.md)》，此处只列举配置的不同之处
-2. 进入 Clash Verge->订阅，点击“新建”（若已有该文件，则忽略此步），类型选择“Merge”，完成后点击“保存”，右击新建的 Merge 文件，点击“启用”
-3. 进入文件夹 *%APPDATA%\io.github.clash-verge-rev.clash-verge-rev\profiles*，找到与上一步新建的 Merge 文件相对应的 .yaml 文件，复制其文件名并替换下面命令中的 `{Merge 文件名}`
-以管理员身份运行 CMD，执行如下命令：
+2. 以管理员身份运行 CMD，执行如下命令：
 ```
 taskkill /f /t /im "Clash Verge*"
 taskkill /f /t /im Clash-Verge*
 taskkill /f /t /im clash-meta*
-curl -o %APPDATA%\io.github.clash-verge-rev.clash-verge-rev\profiles\{Merge 文件名}.yaml -L https://fastly.jsdelivr.net/gh/DustinWin/ruleset_geodata@clash/ruleset-fakeip-user.yaml
+curl -o "%APPDATA%\io.github.clash-verge-rev.clash-verge-rev\profiles\Merge.yaml" -L https://cdn.jsdelivr.net/gh/DustinWin/ruleset_geodata@clash-config/ruleset-fakeip-user.yaml
 ```
-小窍门：
-- 1. 可以配置一键更新 Clash.Meta 内核和自定义配置文件的脚本  
-- 2. 编辑本文文档，粘贴如下内容：
-```
-taskkill /f /t /im "Clash Verge*"
-taskkill /f /t /im Clash-Verge*
-taskkill /f /t /im clash-meta*
-curl -o "%LOCALAPPDATA%\Clash Verge\clash-meta.exe" -L https://mirror.ghproxy.com/https://raw.githubusercontent.com/DustinWin/clash_singbox-tools/main/Clash.Meta-release/clash.meta-windows-amd64.exe
-curl -o "%LOCALAPPDATA%\Clash Verge\clash-meta-alpha.exe" -L https://mirror.ghproxy.com/https://raw.githubusercontent.com/DustinWin/clash_singbox-tools/main/Clash.Meta-alpha/clash.meta-windows-amd64.exe
-curl -o %APPDATA%\io.github.clash-verge-rev.clash-verge-rev\profiles\{Merge 文件名}.yaml -L https://fastly.jsdelivr.net/gh/DustinWin/ruleset_geodata@clash/fake-ip-user.yaml
-pause
-```
-- 3. 另存为 .bat 文件，右击并选择“以管理员身份运行”即可
-# 四、 在线 Dashboard 面板
-推荐使用在线 Dashboard 面板 [metacubexd](https://github.com/metacubex/metacubexd)，访问地址：https://d.metacubex.one
-1. 需要设置该网站“允许不安全内容”，以 Chrome 浏览器为例，进入设置->隐私和安全->网站设置->更多内容设置->不安全内容（或者直接打开 `chrome://settings/content/insecureContent` 进行设置），在“允许显示不安全内容”内添加 `https://d.metacubex.one`  
-<img src="https://github.com/DustinWin/clash-tutorials/assets/45238096/a5ba7e10-b060-4548-81f9-3815f6619bdd" width="60%"/>
+# 三、 在线 Dashboard 面板
+推荐使用在线 Dashboard 面板 [metacubexd](https://github.com/metacubex/metacubexd)，访问地址：https://metacubex.github.io/metacubexd
+1. 需要设置该网站“允许不安全内容”，以 Chrome 浏览器为例，进入设置 -> 隐私和安全 -> 网站设置 -> 更多内容设置 -> 不安全内容（或者直接打开 `chrome://settings/content/insecureContent` 进行设置），在“允许显示不安全内容”内添加 `https://metacubex.github.io`  
+<img src="https://github.com/DustinWin/clash_singbox-tutorials/assets/45238096/4ab824d5-9a7f-4aa8-9b1e-71a8deacdbc5" width="60%"/>
 
-2. 首次进入 https://d.metacubex.one 需要添加“host url”，输入 `http://127.0.0.1:9090` 并点击“添加”，最后点击下方新增的 http://127.0.0.1:9090 即可访问 Dashboard 面板  
-<img src="https://github.com/DustinWin/clash-tutorials/assets/45238096/eb57b6b6-6af6-4c19-8077-68f0037803a3" width="60%"/>
+2. 首次进入 https://metacubex.github.io/metacubexd 需要添加“后端地址”，输入 `http://127.0.0.1:9090` 并点击“添加”，最后点击下方新增的 http://127.0.0.1:9090 即可访问 Dashboard 面板  
+<img src="https://github.com/user-attachments/assets/e59953da-2226-4f50-a32c-f2bc5377b344" width="60%"/>
